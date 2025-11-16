@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Lector de noticias</title>
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   <header>
+      <h1>Lector de noticias</h1>
+   </header>
+   <main>
+      <h3>Bienvenido a nuestra sección de noticias a nivel mundial</h3>
+      <section id="seccion-noticias">
+         <div id="cuerpo-noticias">
+            <button id="boton-refrescar">Actualizar noticias</button>
+            <ul id="lista-articulos">
+            </ul>
+         </div>
+      </section>
+   </main>
+   <footer>
+      <p>Alumno: Raúl Humberto Díaz Fernández <br>Asesor: Sonia Ariadna San Vicente Rinza <br>Universidad Virtual del Estado de Guanajuato</p>
+   </footer>
+   <script>
+      function obtenerNoticias() {
+         const listaArticulos = document.getElementById("lista-articulos");
+
+         fetch("https://newsapi.org/v2/top-headlines?country=us&apiKey=50f8eb4c371c4b8eb1eb764a99e03633")
+         .then((response) => {
+            if (!response.ok) {
+               listaArticulos.insertAdjacentHTML("beforeend","<li>Disculpe las molestias, la API de noticias no está disponible por el momento, favor de intentar más tarde.</li>");
+               throw new Error("Problemas con la API, intente más tarde.");
+            } else {
+               return response.json();
+            }
+         })
+         .then((data) => {
+            console.log(data);
+            
+            listaArticulos.innerHTML = "";
+            if (data.articles.length > 0) {
+               data.articles.forEach( article => {
+                  listaArticulos.insertAdjacentHTML("beforeend", 
+                  `<li>
+                     <a href=${article.url} target="_blank" class="fuente">${article.title != null ? article.title : ""}</a>
+                     <p>${article.description != null ? article.description : ""}</p>
+                     <p class="fecha">Fecha: ${article.publishedAt != null ? article.publishedAt.substring(0, article.publishedAt.length-10) : ""}</p>
+                     <p class="autor">Autor: ${article.author != null ? article.author : "No disponible"}</p>
+                     <img src=${article.urlToImage != null ? article.urlToImage : ""} alt="Imagen de noticia" /><br>
+                     <a href=${article.url} target="_blank" class="fuente">Ver noticia en: ${article.source.name != null ? article.source.name : ""}</a>
+                  </li>`);
+               })
+            } else {
+               listaArticulos.insertAdjacentHTML("beforeend","<li>Disculpe las molestias, no hay noticias por el momento.");
+            }
+         })
+         .catch((error) => console.log(error));
+      }
+
+      obtenerNoticias();
+
+      const botonRefrescar = document.getElementById("boton-refrescar").addEventListener("click", function() {
+         obtenerNoticias();
+      });
+
+      
+   </script>
+</body>
+</html>
