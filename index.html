@@ -27,12 +27,7 @@
       function obtenerNoticias() {
          const listaArticulos = document.getElementById("lista-articulos");
 
-         fetch("https://newsapi.org/v2/top-headlines?country=us", {
-            method: 'GET',
-            headers: {
-               'Authorization': '50f8eb4c371c4b8eb1eb764a99e03633'
-            }
-         })
+         fetch("/api/noticias")
          .then((response) => {
             if (!response.ok) {
                listaArticulos.insertAdjacentHTML("beforeend","<li>Disculpe las molestias, la API de noticias no está disponible por el momento, favor de intentar más tarde.</li>");

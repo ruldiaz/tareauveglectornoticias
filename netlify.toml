@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/api/noticias"
+  to = "https://newsapi.org/v2/top-headlines?country=us&apiKey=50f8eb4c371c4b8eb1eb764a99e03633"
+  status = 200
+  force = true
+  headers = { x-cors = "true" }
